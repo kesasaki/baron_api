@@ -1,6 +1,8 @@
 <?php
 $name = htmlspecialchars($_GET['name'], ENT_QUOTES);
-$link = mysql_connect('localhost', 'root', '');
+$json = file_get_contents("./password.json");
+$arr  = json_decode($json, true);
+$link = mysql_connect('localhost', 'root', $arr[0]);
 if (!$link) {
     die('接続失敗です。'.mysql_error());
 }

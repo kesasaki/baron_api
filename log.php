@@ -3,7 +3,7 @@ $user_id   = htmlspecialchars($_GET['user_id'],     ENT_QUOTES);
 $user_name = htmlspecialchars($_GET['user_name'],   ENT_QUOTES);
 $score     = htmlspecialchars($_GET['score'],       ENT_QUOTES);
 $is_clear  = htmlspecialchars($_GET['is_clear'],    ENT_QUOTES);
-$clear_time= htmlspecialchars($_GET['clear_time'],  ENT_QUOTES);
+$play_time = htmlspecialchars($_GET['play_time'],  ENT_QUOTES);
 $dead_x    = htmlspecialchars($_GET['dead_x'],      ENT_QUOTES);
 $dead_y    = htmlspecialchars($_GET['dead_y'],      ENT_QUOTES);
 $stage_id  = htmlspecialchars($_GET['stage_id'],    ENT_QUOTES);
@@ -19,8 +19,8 @@ if (!$score) {
 if (!$is_clear) {
     $is_clear = false;
 }
-if (!$clear_time) {
-    $clear_time = 1000000;
+if (!$play_time) {
+    $play_time = 1000000;
 }
 if (!$dead_x) {
     $dead_x = "0";
@@ -32,8 +32,9 @@ if (!$stage_id) {
     $stage_id = "1";
 }
 
-
-$link = mysql_connect('localhost', 'root', '');
+$json = file_get_contents("./password.json");
+$arr  = json_decode($json, true);
+$link = mysql_connect('localhost', 'root', $arr[0]);
 if (!$link) {
     die('接続失敗です。'.mysql_error());
 }
@@ -46,8 +47,8 @@ if (!$db_selected){
 print("<p> $db_name データベースを選択しました。</p>");
 
 $sql = "INSERT INTO  log(
-    user_id,     user_name,    score,     is_clear,    clear_time,    dead_x,    dead_y,    stage_id) VALUES (
-   '$user_id', '$user_name', '$score',  '$is_clear', '$clear_time', '$dead_x', '$dead_y', '$stage_id' )";
+    user_id,     user_name,    score,     is_clear,    play_time,    dead_x,    dead_y,    stage_id) VALUES (
+   '$user_id', '$user_name', '$score',  '$is_clear', '$play_time', '$dead_x', '$dead_y', '$stage_id' )";
 $result_flag = mysql_query($sql);
 
 if (!$result_flag) {
