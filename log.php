@@ -46,7 +46,7 @@ if (!$db_selected){
 print("<p> $db_name データベースを選択しました。</p>");
 
 $sql = "INSERT INTO  log(
-    user_id,  user_name,  score,   is_clear,  clear_time,  dead_x,  dead_y,  stage_id) VALUES (
+    user_id,     user_name,    score,     is_clear,    clear_time,    dead_x,    dead_y,    stage_id) VALUES (
    '$user_id', '$user_name', '$score',  '$is_clear', '$clear_time', '$dead_x', '$dead_y', '$stage_id' )";
 $result_flag = mysql_query($sql);
 
