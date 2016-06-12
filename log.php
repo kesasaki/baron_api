@@ -1,12 +1,15 @@
 <?php
-$user_id   = htmlspecialchars($_GET['user_id'],     ENT_QUOTES);
-$user_name = htmlspecialchars($_GET['user_name'],   ENT_QUOTES);
-$score     = htmlspecialchars($_GET['score'],       ENT_QUOTES);
-$is_clear  = htmlspecialchars($_GET['is_clear'],    ENT_QUOTES);
-$play_time = htmlspecialchars($_GET['play_time'],  ENT_QUOTES);
-$dead_x    = htmlspecialchars($_GET['dead_x'],      ENT_QUOTES);
-$dead_y    = htmlspecialchars($_GET['dead_y'],      ENT_QUOTES);
-$stage_id  = htmlspecialchars($_GET['stage_id'],    ENT_QUOTES);
+if($_SERVER["REQUEST_METHOD"] != "POST"){
+    die('POSTでアクセスしてください');
+}
+$user_id   = htmlspecialchars($_POST['user_id'],     ENT_QUOTES);
+$user_name = htmlspecialchars($_POST['user_name'],   ENT_QUOTES);
+$score     = htmlspecialchars($_POST['score'],       ENT_QUOTES);
+$is_clear  = htmlspecialchars($_POST['is_clear'],    ENT_QUOTES);
+$play_time = htmlspecialchars($_POST['play_time'],  ENT_QUOTES);
+$dead_x    = htmlspecialchars($_POST['dead_x'],      ENT_QUOTES);
+$dead_y    = htmlspecialchars($_POST['dead_y'],      ENT_QUOTES);
+$stage_id  = htmlspecialchars($_POST['stage_id'],    ENT_QUOTES);
 if (!$user_id) {
     $user_id = "0";
 }
