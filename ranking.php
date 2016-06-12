@@ -11,6 +11,26 @@ if (!$db_selected){
     die('データベース選択失敗です。'.mysql_error());
 }
 print("<p> $db_name データベースを選択しました。</p>");
+
+$sql = "select * from log;";
+$result = mysql_query($sql);
+
+if (!$result) {
+    die("$sql が失敗しました。".mysql_error());
+}
 mysql_close($link);
-echo "入力したお名前は".$name."ですね";
+
+$record = array();
+while ($row = mysql_fetch_array($result)) {
+    $record[] = $row;
+}
+
+// scoreでソート
+$key_arr = array();
+foreach ($record as $key => $value){
+  $key_arr[$key] = $value['score'];
+}
+array_multisort($key_arr , SORT_DESC , $record);
+
+var_dump($record);
 ?>
