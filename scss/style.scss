@@ -1,0 +1,34 @@
+            dl {
+                padding: 0px;
+                margin: 10px 0 10px 0;
+                border-bottom: 0px solid #BBBBBB;
+                dt {
+                    border-top: 0px solid #BBBBBB;
+                    padding-top: 0;
+                    margin: 0 0 5px 0;
+                    float: none;
+                }
+                dd {
+                    margin: 0;
+                    vertical-align: top;
+                    ul {
+                        li {
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+            ul {
+                padding: 0;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                list-style: none;
+                padding-left: 0px;
+                li{
+                    border-bottom:    1px solid black;
+                    display: inline-block;
+                    list-style-type: none;
+                    width: 32%;
+                    font-size: 24px;
+                }
+            }
