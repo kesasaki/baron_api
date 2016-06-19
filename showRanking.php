@@ -15,7 +15,7 @@ if (!$db_selected){
     die('データベース選択失敗です。'.mysql_error());
 }
 
-$sql = "select * from log;";
+$sql = "select *,MAX(score),SUM(play_time) from log group by user_name order by MAX(score) desc;";
 $result = mysql_query($sql);
 
 if (!$result) {
@@ -28,18 +28,13 @@ while ($row = mysql_fetch_array($result)) {
     $record[] = $row;
 }
 
-// scoreでソート
-$key_arr = array();
-foreach ($record as $key => $value){
-  $key_arr[$key] = $value['score'];
-}
-array_multisort($key_arr , SORT_DESC , $record);
 ?>
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
+    <meta name="format-detection" content="telephone=no">
     <title>baron ranking</title>
     <link href='https://fonts.googleapis.com/css?family=Sorts+Mill+Goudy' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
@@ -49,16 +44,16 @@ array_multisort($key_arr , SORT_DESC , $record);
       <dt>
         <ul>
           <li>ユーザ名</li>
-          <li>スコア</li>
-          <li>プレイ時間</li>
+          <li>ハイスコア</li>
+          <li>総プレイ時間</li>
         </ul>
       </dt>
       <?php foreach($record as $key => $val) : ?>
         <dd>
           <ul>
             <li><?php echo $val['user_name'] ?></li>
-            <li><?php echo $val['score'] ?></li>
-            <li><?php echo $val['play_time'] ?></li>
+            <li><?php echo $val['MAX(score)'] ?></li>
+            <li><?php echo $val['SUM(play_time)'] ?></li>
           </ul>
         </dd>
       <?php endforeach; ?>
