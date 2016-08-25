@@ -55,8 +55,10 @@ $sql = "INSERT INTO  log(
 $result_flag = mysql_query($sql);
 
 if (!$result_flag) {
+    file_put_contents("log/error_" . date('Ymd') . '.txt', date("Y-m-d H:i:s") . " $user_id $user_name $score $play_time $sql クエリーが失敗しました。" . mysql_error() . PHP_EOL, FILE_APPEND); 
     die(" $sql クエリーが失敗しました。".mysql_error());
 }
+file_put_contents("log/log_" . date('Ymd') . '.txt', date("Y-m-d H:i:s") . " $user_id $user_name $score $play_time" . PHP_EOL, FILE_APPEND); 
 
 mysql_close($link);
 ?>
