@@ -1,4 +1,5 @@
 <?php
+// パラメータをパース
 if($_SERVER["REQUEST_METHOD"] != "POST"){
     die('POSTでアクセスしてください');
 }
@@ -34,9 +35,11 @@ if (!$dead_y) {
 if (!$stage_id) {
     $stage_id = "1";
 }
-
 $json = file_get_contents("./password.json");
 $arr  = json_decode($json, true);
+
+
+// DB接続、DB選択
 $link = mysql_connect('localhost', 'root', $arr[0]);
 if (!$link) {
     die('接続失敗です。'.mysql_error());
@@ -49,11 +52,11 @@ if (!$db_selected){
 }
 print("<p> $db_name データベースを選択しました。</p>");
 
+// log テーブルに挿入
 $sql = "INSERT INTO  log(
     user_id,     user_name,    score,     is_clear,    play_time,    dead_x,    dead_y,    stage_id) VALUES (
    '$user_id', '$user_name', '$score',  '$is_clear', '$play_time', '$dead_x', '$dead_y', '$stage_id' )";
 $result_flag = mysql_query($sql);
-
 if (!$result_flag) {
     file_put_contents("log/error_" . date('Ymd') . '.txt', date("Y-m-d H:i:s") . " $user_id $user_name $score $play_time $sql クエリーが失敗しました。" . mysql_error() . PHP_EOL, FILE_APPEND); 
     die(" $sql クエリーが失敗しました。".mysql_error());
