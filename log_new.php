@@ -1,39 +1,21 @@
 <?php
 // パラメータをパース
+/*
 if($_SERVER["REQUEST_METHOD"] != "POST"){
     die('POSTでアクセスしてください');
 }
-$user_id   = htmlspecialchars($_POST['user_id'],     ENT_QUOTES);
-$user_name = htmlspecialchars($_POST['user_name'],   ENT_QUOTES);
-$score     = htmlspecialchars($_POST['score'],       ENT_QUOTES);
-$is_clear  = htmlspecialchars($_POST['is_clear'],    ENT_QUOTES);
-$play_time = htmlspecialchars($_POST['play_time'],  ENT_QUOTES);
-$dead_x    = htmlspecialchars($_POST['dead_x'],      ENT_QUOTES);
-$dead_y    = htmlspecialchars($_POST['dead_y'],      ENT_QUOTES);
-$stage_id  = htmlspecialchars($_POST['stage_id'],    ENT_QUOTES);
+*/
+$user_id   = htmlspecialchars($_GET['user_id'],     ENT_QUOTES);
+$score     = htmlspecialchars($_GET['score'],       ENT_QUOTES);
+$play_time = htmlspecialchars($_GET['play_time'],  ENT_QUOTES);
 if (!$user_id) {
     $user_id = "0";
-}
-if (!$user_name) {
-    $user_name = "no_name";
 }
 if (!$score) {
     $score = "0";
 }
-if (!$is_clear) {
-    $is_clear = false;
-}
 if (!$play_time) {
-    $play_time = 1000000;
-}
-if (!$dead_x) {
-    $dead_x = "0";
-}
-if (!$dead_y) {
-    $dead_y = "0";
-}
-if (!$stage_id) {
-    $stage_id = "1";
+    $play_time = 10;
 }
 $json = file_get_contents("./password.json");
 $arr  = json_decode($json, true);
@@ -52,11 +34,28 @@ if (!$db_selected){
 }
 print("<p> $db_name データベースを選択しました。</p>");
 
-// log テーブルに挿入
-$sql = "INSERT INTO  log(
-    user_id,     user_name,    score,     is_clear,    play_time,    dead_x,    dead_y,    stage_id) VALUES (
-   '$user_id', '$user_name', '$score',  '$is_clear', '$play_time', '$dead_x', '$dead_y', '$stage_id' )";
+
+// user 情報を取得
+$sql = "SELECT * FROM user WHERE user_id = '$user_id'";
+$result = mysql_query($sql);
+$record = array();
+while ($row = mysql_fetch_array($result)) {
+    $record[] = $row;
+}
+
+$json = json_encode($record);
+echo $json;
+
+$highscore      = ($score > $record[0]['highscore']) ? $score : $record[0]['highscore'];
+$play_count     = $record[0]['play_count'] + 1;
+$play_time_sum  = $record[0]['play_time_sum'] + $play_time;
+
+$sql = "UPDATE user SET   highscore='$highscore',
+                          play_count='$play_count',
+                          play_time_sum='$play_time_sum'
+                    WHERE user_id = '$user_id'";
 $result_flag = mysql_query($sql);
+$user_name = $record[0]['user_name'];
 if (!$result_flag) {
     file_put_contents("log/error_" . date('Ymd') . '.txt', date("Y-m-d H:i:s") . " $user_id $user_name $score $play_time $sql クエリーが失敗しました。" . mysql_error() . PHP_EOL, FILE_APPEND); 
     die(" $sql クエリーが失敗しました。".mysql_error());

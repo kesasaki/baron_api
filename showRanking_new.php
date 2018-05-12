@@ -15,7 +15,7 @@ if (!$db_selected){
     die('データベース選択失敗です。'.mysql_error());
 }
 
-$sql = "select * from log order by score desc;";
+$sql = "select * from user order by highscore desc;";
 $result = mysql_query($sql);
 
 if (!$result) {
@@ -43,19 +43,19 @@ while ($row = mysql_fetch_array($result)) {
     <dl>
       <dt>
         <ul>
-          <li>スコア</li>
+          <li>ユーザID</li>
           <li>ユーザ名</li>
-          <li>コメント</li>
-          <li>日時</li>
+          <li>ハイスコア</li>
+          <li>総プレイ時間</li>
         </ul>
       </dt>
       <?php foreach($record as $key => $val) : ?>
         <dd>
           <ul>
-            <li><?php echo $val['score'] ?></li>
+            <li><?php echo $val['user_id'] ?></li>
             <li><?php echo $val['user_name'] ?></li>
-            <li><?php echo $val['comment'] ?></li>
-            <li><?php echo $val['create_time'] ?></li>
+            <li><?php echo $val['highscore'] ?></li>
+            <li><?php echo $val['play_time_sum'] ?></li>
           </ul>
         </dd>
       <?php endforeach; ?>
